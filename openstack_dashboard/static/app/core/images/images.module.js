@@ -70,7 +70,7 @@
                $memoize,
                keystone) {
     registry.getResourceType(imageResourceType)
-      .setNames(gettext('Image'), gettext('Images'))
+      .setNames(gettext('Image'), gettext('Imagessssss'))
       .setSummaryTemplateUrl(basePath + 'details/drawer.html')
       .setItemInTransitionFunction(imagesService.isInTransition)
       .setProperties(imageProperties(imagesService, statuses))

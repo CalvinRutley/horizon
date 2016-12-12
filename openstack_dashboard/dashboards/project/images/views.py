@@ -42,7 +42,7 @@ class AngularIndexView(generic.TemplateView):
 class IndexView(tables.DataTableView):
     table_class = images_tables.ImagesTable
     template_name = 'project/images/index.html'
-    page_title = _("Images")
+    page_title = _("Imagessssss")
 
     def has_prev_data(self, table):
         return getattr(self, "_prev", False)
