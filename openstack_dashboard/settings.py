@@ -325,6 +325,7 @@ ANGULAR_FEATURES = {
     'flavors_panel': False,
     'users_panel': False,
     'output_panel': True,
+    'testPan_panel': True,
 }
 
 # Notice all customizable configurations should be above this line
