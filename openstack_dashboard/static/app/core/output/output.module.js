@@ -1,19 +1,29 @@
-/**
- * (c) Copyright 2015 Hewlett-Packard Development Company, L.P.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain
- * a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
+/*(function () {
+    'use strict';
 
+    angular
+        .module('horizon.app.core.output', [
+            'ngRoute'
+        ])
+
+
+    function run(registry) {
+
+        registry
+            .tableColumns
+            .append({
+                id: 'owner',
+                priority: 1                                          //****JUST AN EXAMPLE****
+                //filters: [$memoize(keystone.getProjectName)],
+                //policies: [{rules: [['identity', 'identity:get_project']]}]
+            })
+            .append({
+
+            })
+
+    }
+});
+*/
 (function() {
   'use strict';
 
@@ -42,7 +52,6 @@
       'queued': gettext('Queued'),
       'pending_delete': gettext('Pending Delete'),
       'killed': gettext('Killed'),
-      'deactivated': gettext('Deactivated'),
       'deleted': gettext('Deleted')
     })
     .constant('horizon.app.core.images.transitional-statuses', [
@@ -76,7 +85,6 @@
       //.setItemInTransitionFunction(imagesService.isInTransition)
       //.setProperties(imageProperties(imagesService, statuses))
       .setListFunction(imagesService.getImagesPromise)
-      .setNeedsFilterFirstFunction(imagesService.getFilterFirstSettingPromise)
       .tableColumns
       .append({
         id: 'owner',
@@ -269,6 +277,7 @@
    */
   function events() {
     return {
+      VOLUME_CHANGED: 'horizon.app.core.images.VOLUME_CHANGED',
       IMAGE_CHANGED: 'horizon.app.core.images.IMAGE_CHANGED',
       IMAGE_METADATA_CHANGED: 'horizon.app.core.images.IMAGE_METADATA_CHANGED',
       IMAGE_UPLOAD_PROGRESS: 'horizon.app.core.images.IMAGE_UPLOAD_PROGRESS'
@@ -278,8 +287,7 @@
   config.$inject = [
     '$provide',
     '$windowProvider',
-    '$routeProvider',
-    'horizon.app.core.detailRoute'
+    '$routeProvider'
   ];
 
   /**
@@ -290,7 +298,7 @@
    * @description Routes used by this module.
    * @returns {undefined} Returns nothing
    */
-  function config($provide, $windowProvider, $routeProvider, detailRoute) {
+  function config($provide, $windowProvider, $routeProvider) {
     var path = $windowProvider.$get().STATIC_URL + 'app/core/images/';
     $provide.constant('horizon.app.core.images.basePath', path);
 
@@ -311,7 +319,7 @@
     });
 
     function goToAngularDetails(params) {
-      return detailRoute + 'OS::Glance::Image/' + params.id;
+      return 'project/ngdetails/OS::Glance::Image/' + params.id;
     }
   }
 
