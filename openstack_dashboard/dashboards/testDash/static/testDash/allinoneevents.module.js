@@ -5,6 +5,6 @@
     'use strict';
 
     angular
-        .module('allInOneEvents', []);
+        .module('horizon.dashboard.testDash.allInOneEvents', []);
 
 })();
