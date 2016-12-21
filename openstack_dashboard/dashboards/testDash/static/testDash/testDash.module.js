@@ -6,7 +6,7 @@
 
   angular
     .module('horizon.dashboard.testDash', [
-      'horizon.dashboard.testDash.testPan'
+      'horizon.dashboard.testDash.output'
     ])
     .config(config);
 
