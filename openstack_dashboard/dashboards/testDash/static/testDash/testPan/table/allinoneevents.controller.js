@@ -67,7 +67,7 @@
 
         //ws.onmessage = function(event) {
         //    var newEvent = JSON.parse(event.data);
-        //    updateTable(newEvent);
+        //    updateTable(newEvent.body);
         //};
 
 
