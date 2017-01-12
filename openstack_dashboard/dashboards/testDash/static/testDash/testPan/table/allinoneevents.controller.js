@@ -23,32 +23,37 @@
             } //example objects
         ];
 
-        //this.updateTable = function(event) {
-        //    eventsTable.push({name: 'newEvent.name',event:'newEvent.event'});
-        //};
+        this.updateTable = function(event) {
+            eventsTable.push({name: 'newEvent.name',event:'newEvent.event'});
+        };
 
-        //var wsroute = 'localhost'; //to allow for reuse, should just use OPENSTACK_HOST value? If empty use localhost?
-        //var connection = 'ws://' + wsroute + ':80'; //should be port 80 by default? or port 443 if secure connection?
+        //var wsroute = 'localhost'; //need to dynamically allocate
+        //var connection = 'ws://' + wsroute + ':9000'; //need to dynamically allocate
         //var ws = new WebSocket(connection);
 
         //should these events be in the factory, or should the factory simply create the connection and return the WebSocket object?
         //called when connection is opened
         //ws.onopen = function() {
-        //    var client_id = 'placeholder'; //need to figure out how to dynamically get
-        //    var project_id = 'placeholder'; //need to figure out how to dynamically get
+        //    var client_id = e7514e0109104e3e8ac331de19e04c56; //need to figure out how to dynamically get
+        //    var project_id = 8f93d41e7fae4de8ac4e8613d2e598ae; //replace as needed
+        //    var authtoken = 'enter value from keystone auth here'
 
-        //    //authenticate = function() {
-        //        //ws.send(authentication); //placeholder
-        //    //};
+        //    authenticate = function() {
+        //            var authentication = {'action': 'authenticate',
+        //                                  'headers': {'X-Auth-Token': authtoken, 'Client-ID': client_id, 'X-Project-ID': project_id}};
 
-        //    subscribe = function() { //somehow have a parameter that allows to set different subscriptions? not priority
-        //        var subscription = {'action': subscription_create,
-        //                            'headers': {'Client-ID': placeholder, 'X-Project-ID': placeholder},
-        //                            'body': {'queue_name': 'horizon_events', 'ttl': 3600}};
-        //        ws.send(JSON.stringify(subscription));
+        //        ws.send(authentication); //placeholder
         //    };
 
-        //    subscribe;
+        //    subscribe = function() { //somehow have a parameter that allows to set different subscriptions? not priority
+        //        var subscription = {'action': 'subscription_create',
+        //                            'headers': {'Client-ID': client_id, 'X-Project-ID': project_id},
+        //                            'body': {'queue_name': 'horizon_events', 'ttl': 3600}}; //could dynamically assign queue name
+        //        ws.send(JSON.stringify(subscription));
+        //    };
+        //
+        // authenticate;
+        // subscribe;
 
         //};
 
@@ -62,7 +67,7 @@
 
         //ws.onmessage = function(event) {
         //    var newEvent = JSON.parse(event.data);
-        //    updateTable(newEvent);
+        //    updateTable(newEvent.body);
         //};
 
 
