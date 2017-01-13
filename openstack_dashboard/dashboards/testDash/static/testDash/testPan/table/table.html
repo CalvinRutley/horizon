@@ -1,14 +1,21 @@
 <h1>Event Monitoring</h1>
-<div>Output</div>
-<table ng-controller="OutController as controller">
-    <thead>
-        <th>Name</th>
-        <th>Event</th>
-    </thead>
-    <tbody>
-        <tr ng-repeat="fruit in controller.eventsTable">
-            <td>{$ fruit.name $}</td>
-            <td>{$ fruit.body $}</td>
-        </tr>
-    </tbody>
-</table>
+<div Output ng-app="output" ng-controller="OutController as controller">
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Event</th>
+        </thead>
+        <button ng-click="controller.updateTable({'name':'testmyass','body':'moretest'})">Test</button>
+        <tbody>
+            <tr ng-repeat="fruit in controller.eventsTable">
+                <td>{$ fruit.name $}</td>
+                <td>{$ fruit.body $}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button ng-click="controller.createString('blablatest')">Test</button>
+    <p>success: {$ controller.opensuccess $}
+    <p>connclosed: {$ controller.connclosed $}
+    <p>authString: {$ controller.authString $}
+    <p>newString: {$ controller.receivedString $}
+</div>
