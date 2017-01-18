@@ -29,6 +29,7 @@
 
         ctrl.opensuccess = 0;
         ctrl.connclosed = 0;
+        ctrl.msgeventtrigger = 0;
         ctrl.authString = '';
         ctrl.receivedString = '';
 
@@ -38,6 +39,10 @@
 
         ctrl.close = function() {
             ctrl.connclosed += 1;
+        }
+
+        ctrl.received = function() {
+            ctrl.msgeventtrigger += 1;
         }
 
         ctrl.createString = function(string) {
@@ -96,8 +101,9 @@
         };
 
         ws.onmessage = function(event) {
+            ctrl.received();
             var newEvent = JSON.parse(event.data);
-            ctrl.createReceivedString(newEvent);
+            //ctrl.createReceivedString(newEvent);
             ctrl.updateTable(newEvent.body);
         };
 
