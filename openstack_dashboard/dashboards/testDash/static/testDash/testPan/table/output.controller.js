@@ -14,31 +14,26 @@
         //table of events, needs to be ordered
         ctrl.eventsTable = [
             {
-                name:"instance1",
-                body:"Blown up!"
-            },
-            {
-                name:"network2",
-                body:"Launched successfully!"
-            } //example objects
+                name:"Instance Two",
+                body:"Launched Successfully",
+                time:"13:35:22",
+                date:"2017:01:19"
+            }
         ];
 
         ctrl.updateTable = function(newEvent) {
-            ctrl.eventsTable.push({name: newEvent.name, body: newEvent.body});
+            console.log(newEvent.name);
+            ctrl.eventsTable.push({name: newEvent.name, body: newEvent.body, time: newEvent.time, date: newEvent.date});
+            console.log(ctrl.eventsTable);
         };
 
+        //testing variables and functions
         ctrl.opensuccess = 0;
-        ctrl.connclosed = 0;
         ctrl.msgeventtrigger = 0;
         ctrl.authString = '';
-        ctrl.receivedString = '';
 
         ctrl.success = function() {
             ctrl.opensuccess += 1;
-        }
-
-        ctrl.close = function() {
-            ctrl.connclosed += 1;
         }
 
         ctrl.received = function() {
@@ -49,11 +44,7 @@
             ctrl.authString = string;
         }
 
-        ctrl.createReceivedString = function(nstring) {
-            ctrl.receivedString = nstring;
-        }
-
-
+        //websocket stuff
         var wsroute = '172.29.86.71'; //need to dynamically allocate
         var connection = 'ws://' + wsroute + ':9000'; //need to dynamically allocate
         var ws = new WebSocket(connection);
@@ -62,9 +53,9 @@
         //called when connection is opened
         ws.onopen = function() {
             ctrl.success();
-            var client_id = 'a050e8fce5db46de98b557066a43c201'; //need to figure out how to dynamically get
+            var client_id = '7254b2c6-a30c-478d-8b12-46bf71fbc41e'; //need to figure out how to dynamically get
             var project_id = 'c3ca2ccaeafa4267a84cc0164e66c874'; //replace as needed
-            var authtoken = 'gAAAAABYeRxwxIMhmOGQw_Wb8W7E0IuBePBOT3gdFlib1t3PEwkjQS7F-qVKHDomVvAxn5CQi6MnakrHBBrOnaW3UxcVSamAS2W0NuykUqjIxmfsBAfed31jphuueE1SHBRWRTFmsxElZgdNTSbJiwi1VoZkx0NBGD9gZw8w_1j9uMegKZf57JI';
+            var authtoken = 'gAAAAABYimbKeZlTTFHzx1xVPNtstFkaiUeB56i6n1LcNjtUqR6MGZ9wEOzgelWZZ3WZTIHGrUY9giI1YvoC0tzyrYHm6mW7YRclbWJjdDCoLQMrEGfVXoHKkdHsJxm7OXQaJV7QItRc6GjkVL2YZQ8gwZUPEVG1MN_bv4XShXdbm_VvSZ5Q1R8';
 
             ctrl.success();
             authenticate();
@@ -75,10 +66,6 @@
             function authenticate() {
                 var authentication = {'action': 'authenticate',
                     'headers': {'X-Auth-Token': authtoken, 'Client-ID': client_id, 'X-Project-ID': project_id}};
-
-
-                //console.log(JSON.stringify(authentication));
-                ctrl.createString(JSON.stringify(authentication));
                 ws.send(JSON.stringify(authentication));
 
             };
@@ -91,20 +78,24 @@
             };
         };
 
-        ws.onclose = function() {
-            ctrl.close();
-            console.log('connection closed'); //need to handle connection close?
+        ws.onclose = function(event) {
+            var reason = JSON.parse(event.reason);
+            console.log(reason);
+            console.log('connection closed');
         };
 
         ws.onerror = function() {
-            console.log('websocket error'); //need to handle errors?
+            console.log('websocket error');
         };
 
         ws.onmessage = function(event) {
             ctrl.received();
+            console.log(event);
             var newEvent = JSON.parse(event.data);
-            //ctrl.createReceivedString(newEvent);
-            ctrl.updateTable(newEvent.body);
+            if(newEvent.Message_Type == "Notification") {
+                console.log(newEvent.body);
+                ctrl.updateTable(newEvent.body);
+            }
         };
 
     }
