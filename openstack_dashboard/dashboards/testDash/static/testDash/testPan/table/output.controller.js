@@ -8,7 +8,11 @@
         .module('horizon.dashboard.testDash.output')
         .controller('OutController', OutController);
 
-    function OutController() {
+    OutController.$inject = [
+        'horizon.framework.widgets.toast.service'
+    ];
+
+    function OutController(toast) {
 
         var ctrl = this;
         //table of events, needs to be ordered
@@ -55,7 +59,7 @@
             ctrl.success();
             var client_id = '7254b2c6-a30c-478d-8b12-46bf71fbc41e'; //need to figure out how to dynamically get
             var project_id = 'c3ca2ccaeafa4267a84cc0164e66c874'; //replace as needed
-            var authtoken = 'gAAAAABYimbKeZlTTFHzx1xVPNtstFkaiUeB56i6n1LcNjtUqR6MGZ9wEOzgelWZZ3WZTIHGrUY9giI1YvoC0tzyrYHm6mW7YRclbWJjdDCoLQMrEGfVXoHKkdHsJxm7OXQaJV7QItRc6GjkVL2YZQ8gwZUPEVG1MN_bv4XShXdbm_VvSZ5Q1R8';
+            var authtoken = 'gAAAAABYk65lk9WUV1wCvvTwAI_SvTIEq2PUxmo-as7VMpfCg2vLyoZfP2mJXjn1dgYYphnieSB2mL8wCGp-DzWM5Gwr9v8CnvTVSeA3gzFrpx5MXe2nSDj6RzlZxp730hAm1XWhMDcrTd9rg3M00EfVpk4BQ4tIWNELHbqfboOOCjJsz0-a3ls';
 
             ctrl.success();
             authenticate();
@@ -79,22 +83,48 @@
         };
 
         ws.onclose = function(event) {
+            console.log(event);
             var reason = JSON.parse(event.reason);
             console.log(reason);
             console.log('connection closed');
+            toast.add('info', "The websocket connection has closed.");
         };
 
         ws.onerror = function() {
             console.log('websocket error');
+            toast.add('error', "Websocket error.");
         };
 
         ws.onmessage = function(event) {
+
+            //test if message has been received
             ctrl.received();
+
+            //to see contents in console
             console.log(event);
-            var newEvent = JSON.parse(event.data);
-            if(newEvent.Message_Type == "Notification") {
-                console.log(newEvent.body);
-                ctrl.updateTable(newEvent.body);
+
+            //parse contents
+            var response = JSON.parse(event.data);
+
+            //This entire bit will move into its own function for cleaner code
+            if(response.Message_Type == "Notification") {
+                console.log(response.body);
+                ctrl.updateTable(response.body);
+            }
+
+            else {
+                var message = response.request.action;
+                message += ': ';
+                if(response.body.hasOwnProperty("message")) {
+                    message += response.body.message;
+                    console.log(message);
+                    toast.add('success', message);
+                }
+                else {
+                    message += response.body.error;
+                    console.log(message);
+                    toast.add('error', message);
+                }
             }
         };
 
