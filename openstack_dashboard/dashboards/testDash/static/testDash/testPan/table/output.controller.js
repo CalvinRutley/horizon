@@ -17,7 +17,7 @@
         'horizon.framework.util.uuid.service'
     ];
 
-    function OutController($q, toast, imageResourceTypeCode, registry, userSession) {
+    function OutController($q, toastService, imageResourceTypeCode, registry, userSession) {
 
 
         var ctrl = this;
@@ -92,12 +92,12 @@
                 if(response.body.hasOwnProperty("message")) {
                     message += response.body.message;
                     console.log(message);
-                    toast.add('success', message);
+                    toastService.add('success', message);
                 }
                 else {
                     message += response.body.error;
                     console.log(message);
-                    toast.add('error', message);
+                    toastService.add('error', message);
                 }
             }
         }
@@ -152,15 +152,16 @@
 
         ws.onclose = function(event) {
             console.log(event);
-            var reason = JSON.parse(event.reason);
+            console.log(event.reason);
+            var reason = event.reason;
             console.log(reason);
-            console.log('connection closed');
-            toast.add('info', "The websocket connection has closed.");
+            console.log('Connection closed because of: ' + reason);
+            toastService.add('info', "The websocket connection has closed. Reason: " + reason);
         };
 
         ws.onerror = function() {
-            console.log('websocket error');
-            toast.add('error', "Websocket error.");
+            console.log('Websocket error.');
+            toastService.add('error', "Websocket error.");
         };
 
         ws.onmessage = function(event) {
