@@ -48,14 +48,15 @@
                 message += ': ';
 
                 if(response.body.hasOwnProperty("message")) {
-                    if(response.request.action = 'authenticate') {
-                        message += response.body.message;
+                    message += response.body.message;
+                    console.log(response.request.action);
+
+                    if(response.request.action == 'authenticate') {
                         console.log(message);
                         toastService.add('success', message);
                         ctrl.authenticated = true;
                     }
-                    else if(response.request.action = 'subscribe') {
-                        message += response.body.message;
+                    else if(response.request.action == 'subscription_create') {
                         console.log(message);
                         toastService.add('success', message);
                         ctrl.subscribed = true;
@@ -122,7 +123,6 @@
                 'headers': {'X-Auth-Token': ctrl.token, 'Client-ID': ctrl.uuid, 'X-Project-ID': ctrl.projectId}};
             ws.send(JSON.stringify(authentication));
             //console.log(JSON.stringify(authentication));
-
         }
 
         var subscribe = function() { //somehow have a parameter that allows to set different subscriptions? not priority
