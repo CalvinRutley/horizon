@@ -37,6 +37,39 @@
             console.log(ctrl.eventsTable);
         };
 
+        ctrl.responseHandler = function(response) {
+            if(response.Message_Type == "Notification") {
+                console.log(response.body);
+                ctrl.updateTable(response.body);
+            }
+
+            else {
+                var message = response.request.action;
+                message += ': ';
+
+                if(response.body.hasOwnProperty("message")) {
+                    message += response.body.message;
+                    console.log(response.request.action);
+
+                    if(response.request.action == 'authenticate') {
+                        console.log(message);
+                        toastService.add('success', message);
+                        ctrl.authenticated = true;
+                    }
+                    else if(response.request.action == 'subscription_create') {
+                        console.log(message);
+                        toastService.add('success', message);
+                        ctrl.subscribed = true;
+                    }
+                }
+                else {
+                    message += response.body.error;
+                    console.log(message);
+                    toastService.add('error', message);
+                }
+            }
+        }
+
         //testing variables and functions
         var session =  userSession.get();
         ctrl.opensuccess = 0;
@@ -46,6 +79,17 @@
         ctrl.uuid = '';
         ctrl.token = '';
 
+        ctrl.success = function() {
+            ctrl.opensuccess += 1;
+        }
+
+        ctrl.received = function() {
+            ctrl.msgeventtrigger += 1;
+        }
+
+        ctrl.createString = function(string) {
+            ctrl.authString = string;
+        }
 
         ctrl.resourceType = registry.getResourceType(imageResourceTypeCode);
 
@@ -66,87 +110,44 @@
 
         */
 
-
-        ctrl.success = function() {
-            ctrl.opensuccess += 1;
-        }
-
-        ctrl.received = function() {
-            ctrl.msgeventtrigger += 1;
-        }
-
-        ctrl.createString = function(string) {
-            ctrl.authString = string;
-        }
-
-        ctrl.responseHandler = function(response) {
-            if(response.Message_Type == "Notification") {
-                console.log(response.body);
-                ctrl.updateTable(response.body);
-            }
-
-            else {
-                var message = response.request.action;
-                message += ': ';
-
-                if(response.body.hasOwnProperty("message")) {
-                    message += response.body.message;
-                    console.log(message);
-                    toastService.add('success', message);
-                }
-                else {
-                    message += response.body.error;
-                    console.log(message);
-                    toastService.add('error', message);
-                }
-            }
-        }
-
         //websocket stuff
-        var wsroute = '172.29.86.71'; //need to dynamically allocate
-        var connection = 'ws://' + wsroute + ':9000'; //need to dynamically allocate
-        var ws = new WebSocket(connection);
+        ctrl.wsroute = '172.29.86.71'; //need to dynamically allocate
+        ctrl.connection = 'ws://' + ctrl.wsroute + ':9000'; //need to dynamically allocate
+
+        var ws = new WebSocket(ctrl.connection);
+        ctrl.authenticated = false;
+        ctrl.subscribed = false;
+
+        var authenticate = function() {
+            var authentication = {'action': 'authenticate',
+                'headers': {'X-Auth-Token': ctrl.token, 'Client-ID': ctrl.uuid, 'X-Project-ID': ctrl.projectId}};
+            ws.send(JSON.stringify(authentication));
+            //console.log(JSON.stringify(authentication));
+        }
+
+        var subscribe = function() { //somehow have a parameter that allows to set different subscriptions? not priority
+            var subscription = {'action': 'subscription_create',
+                'headers': {'Client-ID': ctrl.uuid, 'X-Project-ID': ctrl.projectId},
+                'body': {'queue_name': 'horizon_events_test', 'ttl': 3600}}; //could dynamically assign queue name
+            ws.send(JSON.stringify(subscription));
+        }
 
         //should these events be in the factory, or should the factory simply create the connection and return the WebSocket object?
         //called when connection is opened
         ws.onopen = function() {
+            console.log('Websocket connection opened');
 
             $q.all((userSession.get()).then(function(data) {
 
-                ctrl.projectId = data.project_id;
-                ctrl.uuid = data.id;
-                ctrl.token = data.token;
+            ctrl.projectId = data.project_id;
+            ctrl.uuid = data.id;
+            ctrl.token = data.token;
 
-                ctrl.success();
-                //var client_id = '7254b2c6-a30c-478d-8b12-46bf71fbc41e'; //need to figure out how to dynamically get
-                var client_id = ctrl.uuid;
-                //var project_id = 'c3ca2ccaeafa4267a84cc0164e66c874'; //replace as needed
-                var project_id = ctrl.projectId;
-                //var authtoken = 'gAAAAABYk65lk9WUV1wCvvTwAI_SvTIEq2PUxmo-as7VMpfCg2vLyoZfP2mJXjn1dgYYphnieSB2mL8wCGp-DzWM5Gwr9v8CnvTVSeA3gzFrpx5MXe2nSDj6RzlZxp730hAm1XWhMDcrTd9rg3M00EfVpk4BQ4tIWNELHbqfboOOCjJsz0-a3ls';
-                var authtoken = ctrl.token;
+            authenticate();
+            subscribe();
 
-                ctrl.success();
-                authenticate();
-                ctrl.success();
-                subscribe();
-                ctrl.success();
-
-                function authenticate() {
-                    var authentication = {'action': 'authenticate',
-                        'headers': {'X-Auth-Token': authtoken, 'Client-ID': client_id, 'X-Project-ID': project_id}};
-                    ws.send(JSON.stringify(authentication));
-                    console.log(JSON.stringify(authentication));
-
-                }
-
-                function subscribe() { //somehow have a parameter that allows to set different subscriptions? not priority
-                    var subscription = {'action': 'subscription_create',
-                        'headers': {'Client-ID': client_id, 'X-Project-ID': project_id},
-                        'body': {'queue_name': 'horizon_events_test', 'ttl': 3600}}; //could dynamically assign queue name
-                    ws.send(JSON.stringify(subscription));
-                }
-
-            }));
+        }));
+            ctrl.success();
         };
 
 
