@@ -9,6 +9,7 @@
         .controller('OutController', OutController);
 
     OutController.$inject = [
+        '$scope',
         '$q',
         'horizon.framework.widgets.toast.service',
         'horizon.app.core.images.resourceType',
@@ -17,7 +18,7 @@
         'horizon.framework.util.uuid.service'
     ];
 
-    function OutController($q, toastService, imageResourceTypeCode, registry, userSession) {
+    function OutController($scope, $q, toastService, imageResourceTypeCode, registry, userSession) {
 
 
         var ctrl = this;
@@ -27,7 +28,7 @@
                 name:"Instance Two",
                 body:"Launched Successfully",
                 time:"13:35:22",
-                date:"2017:01:19"
+                date:"2017/01/19"
             }
         ];
 
@@ -35,6 +36,7 @@
             console.log(newEvent.name);
             ctrl.eventsTable.push({name: newEvent.name, body: newEvent.body, time: newEvent.time, date: newEvent.date});
             console.log(ctrl.eventsTable);
+            $scope.$apply();
         };
 
         ctrl.responseHandler = function(response) {
