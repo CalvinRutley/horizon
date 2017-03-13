@@ -34,7 +34,7 @@
 
         ctrl.updateTable = function(newEvent) {
             console.log(newEvent.name);
-            ctrl.eventsTable.push({name: newEvent.name, body: newEvent.body, time: newEvent.time, date: newEvent.date});
+            ctrl.eventsTable.unshift({name: newEvent.name, body: newEvent.body, time: newEvent.time, date: newEvent.date});
             console.log(ctrl.eventsTable);
             $scope.$apply();
         };
