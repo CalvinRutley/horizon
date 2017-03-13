@@ -16,7 +16,7 @@ import horizon
 
 
 class Testdash(horizon.Dashboard):
-    name = _("Testdash")
+    name = _("Notifications")
     slug = "testDash"
     panels = ('testPan', )  # Add your panels here.
     default_panel = 'testPan'  # Specify the slug of the dashboard's default panel.

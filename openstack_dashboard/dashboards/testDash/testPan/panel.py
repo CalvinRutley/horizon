@@ -16,7 +16,7 @@ import horizon
 from openstack_dashboard.dashboards.testDash import dashboard
 
 class Testpan(horizon.Panel):
-    name = _("Testpan")
+    name = _("Output")
     slug = "testPan"
 
 

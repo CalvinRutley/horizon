@@ -8,7 +8,6 @@
             <th>Date</th>
         </thead>
         <tbody>
-        {$ controller.eventsTable $}
             <tr ng-repeat="entry in controller.eventsTable">
                 <td>{$ entry.name $}</td>
                 <td>{$ entry.body $}</td>
@@ -17,6 +16,7 @@
             </tr>
         </tbody>
     </table>
+    <!-- for testing purposes
     <button ng-click="controller.createString('update')">Test</button>
     <div>
         <p>success: {$ controller.opensuccess $}
@@ -27,4 +27,5 @@
         <p>Authenticated: {$ controller.authenticated $}
         <p>Subscribed: {$ controller.subscribed $}
     </div>
+    -->
 </div>
