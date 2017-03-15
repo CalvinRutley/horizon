@@ -25,17 +25,19 @@
         //table of events, needs to be ordered
         ctrl.eventsTable = [
             {
+                tenantID:"a050e8fce5db46de98b557066a43c201",
                 name:"Instance Two",
                 body:"Launched Successfully",
+                requestID:"t7ab407jfide46jj55a45e96m7782jki4",
                 time:"13:35:22",
-                date:"2017/01/19"
+                date:"01/03/2017"
             }
         ];
 
         ctrl.updateTable = function(newEvent) {
-            console.log(newEvent.name);
-            ctrl.eventsTable.unshift({name: newEvent.name, body: newEvent.body, time: newEvent.time, date: newEvent.date});
-            console.log(ctrl.eventsTable);
+            ctrl.eventsTable.unshift({tenantID: newEvent.tenantID, name: newEvent.name, body: newEvent.body,
+                                      requestID: newEvent.requestID, time: newEvent.time, date: newEvent.date});
+            //console.log(ctrl.eventsTable);
             $scope.$apply();
         };
 

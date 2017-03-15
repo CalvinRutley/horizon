@@ -2,22 +2,26 @@
 <div Output ng-app="horizon.dashboard.testDash.output" ng-controller="OutController as controller">
     <table class="table table-striped table-rsp table-detail">
         <thead>
+            <th>Owner</th>
             <th>Name</th>
             <th>Event</th>
+            <th>Request</th>
             <th>Time</th>
             <th>Date</th>
         </thead>
         <tbody>
-            <tr ng-repeat="entry in controller.eventsTable">
+            <tr ng-repeat="entry in controller.eventsTable | limitTo:15">
+                <td>{$ entry.tenantID $}</td>
                 <td>{$ entry.name $}</td>
                 <td>{$ entry.body $}</td>
+                <td>{$ entry.requestID $}</td>
                 <td>{$ entry.time $}</td>
                 <td>{$ entry.date $}</td>
             </tr>
         </tbody>
     </table>
-    <button ng-click="controller.createString('update')">Test</button>
     <!-- for testing purposes
+    <button ng-click="controller.createString('update')">Test</button>
     <div>
         <p>success: {$ controller.opensuccess $}
         <p>message received: {$ controller.msgeventtrigger $}
