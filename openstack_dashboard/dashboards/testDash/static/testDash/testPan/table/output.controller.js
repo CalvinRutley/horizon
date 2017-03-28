@@ -14,14 +14,24 @@
         'horizon.framework.widgets.toast.service',
         'horizon.app.core.images.resourceType',
         'horizon.framework.conf.resource-type-registry.service',
-        'horizon.app.core.openstack-service-api.userSession',
-        'horizon.framework.util.uuid.service'
+        'horizon.app.core.openstack-service-api.settings',
+        'horizon.app.core.openstack-service-api.userSession'
+
     ];
 
-    function OutController($scope, $q, toastService, imageResourceTypeCode, registry, userSession) {
-
+    function OutController($scope, $q, toastService, imageResourceTypeCode, registry, settings, userSession) {
 
         var ctrl = this;
+
+        $q.all([
+        settings.getSetting('UUID')]).then(allowed);
+
+        function allowed(results) {
+            console.log(results);
+             ctrl.uuid2 = results[0];
+            console.log(ctrl.uuid2);
+        }
+
         //table of events, needs to be ordered
         ctrl.eventsTable = [
             {
@@ -139,18 +149,20 @@
         //should these events be in the factory, or should the factory simply create the connection and return the WebSocket object?
         //called when connection is opened
         ws.onopen = function() {
+
             console.log('Websocket connection opened');
 
             $q.all((userSession.get()).then(function(data) {
 
-            ctrl.projectId = data.project_id;
-            ctrl.uuid = data.id;
-            ctrl.token = data.token;
+                ctrl.projectId = data.project_id;
+                ctrl.uuid = data.id;
+                ctrl.token = data.token;
 
-            authenticate();
-            subscribe();
+                authenticate();
+                subscribe();
 
         }));
+
             ctrl.success();
         };
 
@@ -183,7 +195,6 @@
             ctrl.responseHandler(response);
 
         };
-
     }
 
 })();
