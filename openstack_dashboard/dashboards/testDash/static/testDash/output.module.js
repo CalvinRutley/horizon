@@ -3,6 +3,6 @@
   'use strict';
 
   angular
-    .module('horizon.dashboard.testDash.output', []);
+    .module('Output', []);
 
 })();
