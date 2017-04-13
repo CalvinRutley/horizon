@@ -21,8 +21,11 @@
         factory.wsroute = '172.29.86.71';
         factory.wsport = '9000';
         factory.connection = 'ws://' + factory.wsroute + ':' + factory.wsport;
+        factory.queues = ['horizon_events_test'];
         factory.authenticate = authenticate;
         factory.subscribe = subscribe;
+        factory.subscribeAll = subscribeAll;
+        factory.addZaqarQueue = addZaqarQueue;
         var ws = new WebSocket(factory.connection);
 
         //need to be set
@@ -37,13 +40,25 @@
             console.log(JSON.stringify(authentication));
         }
 
-        function subscribe() {
+        function subscribe(queueName) {
             var subscription = {'action': 'subscription_create',
                 'headers': {'Client-ID': factory.uuid, 'X-Project-ID': factory.projectId},
-                'body': {'queue_name': 'horizon_events_test', 'ttl': 3600}};
+                'body': {'queue_name': queueName, 'ttl': 3600}};
             ws.send(JSON.stringify(subscription));
         }
 
+        function subscribeAll() {
+            for(var i=0; i < factory.queues.length; i++) {
+                factory.subscribe(factory.queues[i]);
+            }
+        }
+
+        function addZaqarQueue(queueName) {
+            factory.queues.push(queueName);
+            console.log(factory.queues);
+        }
+
+        //Websocket Events
         ws.onopen = function() {
             console.log('Websocket connection opened');
 
@@ -54,7 +69,7 @@
                 factory.token = data.token;
 
                 factory.authenticate();
-                factory.subscribe();
+                factory.subscribeAll();
 
 
             }));
@@ -81,6 +96,7 @@
             NotificationService.responseHandler(response);
         };
 
+        //return the factory
         return factory;
 
     }
