@@ -26,6 +26,9 @@
 
         ctrl.notificationsTable = NotificationService.eventsTable;
 
+        //test this function
+        //WebsocketService.addZaqarQueue('randomTest');
+
     }
 
 })();
