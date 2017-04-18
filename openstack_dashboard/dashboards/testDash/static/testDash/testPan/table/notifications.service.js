@@ -17,7 +17,7 @@
 
         //bindable members
         factory.updateTable = updateTable;
-        factory.responseHandler = responseHandler;
+        factory.notificationHandler = notificationHandler;
 
         //$q.all([settings.getSetting('UUID')]).then(allowed);
 
@@ -41,37 +41,10 @@
         };
 
 
-        function responseHandler(response) {
-            if (response.Message_Type == "Notification") {
-                console.log(response.body);
-                factory.updateTable(response.body);
-            }
-
-            else {
-                var message = response.request.action;
-                message += ': ';
-
-                if (response.body.hasOwnProperty("message")) {
-                    message += response.body.message;
-                    console.log(response.request.action);
-
-                    if (response.request.action == 'authenticate') {
-                        console.log(message);
-                        //toastService.add('success', message);
-                        factory.authenticated = true;
-                    }
-                    else if (response.request.action == 'subscription_create') {
-                        console.log(message);
-                        //toastService.add('success', message);
-                        factory.subscribed = true;
-                    }
-                }
-                else {
-                    message += response.body.error;
-                    console.log(message);
-                    //toastService.add('error', message);
-                }
-            }
+        //needs to be updated to contain conditional logic about which notifications to store etc
+        function notificationHandler(response) {
+            console.log(response.body);
+            factory.updateTable(response.body);
         }
 
         /*
