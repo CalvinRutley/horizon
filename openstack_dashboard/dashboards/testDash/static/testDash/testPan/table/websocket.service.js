@@ -15,23 +15,28 @@
     function WebsocketService($q, userSession, NotificationService) {
         var factory = {};
 
-        factory.messages = 0;
-        factory.authenticated = false;
-        factory.subscribed = false;
-        factory.wsroute = '172.29.86.71';
-        factory.wsport = '9000';
-        factory.connection = 'ws://' + factory.wsroute + ':' + factory.wsport;
-        factory.queues = ['horizon_events_test'];
-        factory.authenticate = authenticate;
-        factory.subscribe = subscribe;
-        factory.subscribeAll = subscribeAll;
-        factory.addZaqarQueue = addZaqarQueue;
-        var ws = new WebSocket(factory.connection);
-
         //need to be set
         factory.token = '';
         factory.uuid = '';
         factory.projectID = '';
+
+        //should come from config
+        factory.wsroute = '172.29.86.71';
+        factory.wsport = '9000';
+        factory.queues = ['horizon_events_test'];
+
+        factory.connection = 'ws://' + factory.wsroute + ':' + factory.wsport;
+        factory.authenticated = false;
+        factory.subscribed = false;
+        factory.activeSubscriptions = [];
+        factory.authenticate = authenticate;
+        factory.subscribe = subscribe;
+        factory.subscribeAll = subscribeAll;
+        factory.addZaqarQueue = addZaqarQueue;
+        factory.updateSubscriptions = updateSubscriptions;
+        factory.updateSubscribed = updateSubscribed;
+        factory.responseHandler = responseHandler;
+        var ws = new WebSocket(factory.connection);
 
         function authenticate() {
             var authentication = {'action': 'authenticate',
@@ -56,6 +61,54 @@
         function addZaqarQueue(queueName) {
             factory.queues.push(queueName);
             console.log(factory.queues);
+        }
+
+        function updateSubscriptions(subscription) {
+            if(!factory.activeSubscriptions.contains(subscription)) {
+                factory.activeSubscriptions.push(subscription);
+            }
+        }
+
+        function updateSubscribed() {
+            if(factory.activeSubscriptions.length() >= 1) {
+                factory.subscribed = true;
+            }
+            else {
+                factory.subscribed = false;
+            }
+        }
+
+        function responseHandler(response) {
+            if (response.Message_Type == "Notification") {
+                NotificationService.notificationHandler(response);
+            }
+
+            else {
+                var message = response.request.action;
+                message += ': ';
+
+                if (response.body.hasOwnProperty("message")) {
+                    message += response.body.message;
+                    console.log(response.request.action);
+
+                    if (response.request.action == 'authenticate') {
+                        console.log(message);
+                        //toastService.add('success', message);
+                        factory.authenticated = true;
+                    }
+                    else if (response.request.action == 'subscription_create') {
+                        console.log(message);
+                        //toastService.add('success', message);
+                        factory.updateSubscriptions(message);
+                        factory.updateSubscribed();
+                    }
+                }
+                else {
+                    message += response.body.error;
+                    console.log(message);
+                    //toastService.add('error', message);
+                }
+            }
         }
 
         //Websocket Events
@@ -93,7 +146,7 @@
         ws.onmessage = function(event) {
             console.log(event);
             var response = JSON.parse(event.data);
-            NotificationService.responseHandler(response);
+            factory.responseHandler(response);
         };
 
         //return the factory
