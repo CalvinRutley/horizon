@@ -26,6 +26,7 @@
         factory.queues = ['horizon_events_test'];
 
         factory.connection = 'ws://' + factory.wsroute + ':' + factory.wsport;
+        factory.connected = false;
         factory.authenticated = false;
         factory.subscribed = false;
         factory.activeSubscriptions = [];
@@ -64,18 +65,21 @@
         }
 
         function updateSubscriptions(subscription) {
-            if(!factory.activeSubscriptions.contains(subscription)) {
+            console.log(subscription);
+            if(factory.activeSubscriptions.indexOf(subscription) == -1) {
                 factory.activeSubscriptions.push(subscription);
             }
+            console.log(factory.activeSubscriptions);
         }
 
         function updateSubscribed() {
-            if(factory.activeSubscriptions.length() >= 1) {
+            if(factory.activeSubscriptions.length >= 1) {
                 factory.subscribed = true;
             }
             else {
                 factory.subscribed = false;
             }
+            console.log(factory.subscribed);
         }
 
         function responseHandler(response) {
@@ -114,6 +118,7 @@
         //Websocket Events
         ws.onopen = function() {
             console.log('Websocket connection opened');
+            factory.connected = true;
 
             $q.all((userSession.get()).then(function (data) {
 
@@ -135,6 +140,7 @@
             var reason = event.reason;
             console.log(reason);
             console.log('Connection closed because of: ' + reason);
+            factory.connected = false;
             //toastService.add('info', "The websocket connection has closed. Reason: " + reason);
         };
 
