@@ -97,12 +97,10 @@
 
                     if (response.request.action == 'authenticate') {
                         console.log(message);
-                        //toastService.add('success', message);
                         factory.authenticated = true;
                     }
                     else if (response.request.action == 'subscription_create') {
                         console.log(message);
-                        //toastService.add('success', message);
                         factory.updateSubscriptions(message);
                         factory.updateSubscribed();
                     }
@@ -110,7 +108,6 @@
                 else {
                     message += response.body.error;
                     console.log(message);
-                    //toastService.add('error', message);
                 }
             }
         }
@@ -128,8 +125,6 @@
 
                 factory.authenticate();
                 factory.subscribeAll();
-
-
             }));
 
         };
@@ -141,12 +136,11 @@
             console.log(reason);
             console.log('Connection closed because of: ' + reason);
             factory.connected = false;
-            //toastService.add('info', "The websocket connection has closed. Reason: " + reason);
         };
 
         ws.onerror = function() {
-            //console.log('Websocket error.');
-            //toastService.add('error', "Websocket error.");
+            console.log('Websocket error.');
+
         };
 
         ws.onmessage = function(event) {
@@ -155,7 +149,6 @@
             factory.responseHandler(response);
         };
 
-        //return the factory
         return factory;
 
     }

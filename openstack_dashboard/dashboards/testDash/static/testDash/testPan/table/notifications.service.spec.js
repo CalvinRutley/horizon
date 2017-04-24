@@ -4,7 +4,15 @@
 (function () {
   'use strict';
 
-  describe('horizon.app.core.images', function () {
+  describe('Notification Service', function () {
+
+    var service;
+    beforeEach(module('Output'));
+    beforeEach(inject(function($injector) {
+      service = $injector.get('NotificationService');
+    }));
+
+    //placeholder
     it('should exist', function () {
       expect(angular.module('horizon.app.core.images')).toBeDefined();
     });
