@@ -9,25 +9,15 @@
         .controller('OutController', OutController);
 
     OutController.$inject = [
-        '$scope',
-        '$q',
-        'horizon.framework.widgets.toast.service',
-        'horizon.app.core.images.resourceType',
-        'horizon.framework.conf.resource-type-registry.service',
-        'horizon.app.core.openstack-service-api.settings',
-        'horizon.app.core.openstack-service-api.userSession',
         'NotificationService',
         'WebsocketService'
     ];
 
-    function OutController($scope, $q, toastService, imageResourceTypeCode, registry, settings, userSession, NotificationService, WebsocketService) {
+    function OutController(NotificationService, WebsocketService) {
 
         var ctrl = this;
 
         ctrl.notificationsTable = NotificationService.eventsTable;
-
-        //test this function
-        //WebsocketService.addZaqarQueue('randomTest');
 
     }
 

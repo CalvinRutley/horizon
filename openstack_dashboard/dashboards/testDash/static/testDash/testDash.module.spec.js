@@ -4,9 +4,9 @@
 (function () {
   'use strict';
 
-  describe('horizon.app.core.images', function () {
+  describe('Output', function () {
     it('should exist', function () {
-      expect(angular.module('horizon.app.core.images')).toBeDefined();
+      expect(angular.module('Output')).toBeDefined();
     });
   });
 })();
