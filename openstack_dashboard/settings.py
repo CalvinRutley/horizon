@@ -323,9 +323,7 @@ COMPRESS_OFFLINE_CONTEXT = 'horizon.themes.offline_context'
 ANGULAR_FEATURES = {
     'images_panel': True,
     'flavors_panel': False,
-    'users_panel': False,
-    'output_panel': True,
-    'testPan_panel': True,
+    'users_panel': False
 }
 
 # Notice all customizable configurations should be above this line
