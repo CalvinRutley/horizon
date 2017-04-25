@@ -1,23 +1,64 @@
-<h1>Event Notifications</h1>
 <div Output ng-app="Output" ng-controller="OutController as controller">
-    <table class="table table-striped table-rsp table-detail">
-        <thead>
-            <th>Name</th>
-            <th>Event</th>
-            <th>Owner</th>
-            <th>Request</th>
-            <th>Time</th>
-            <th>Date</th>
-        </thead>
-        <tbody>
-            <tr ng-repeat="entry in controller.notificationsTable | limitTo:15">
-                <td>{$ entry.name $}</td>
-                <td>{$ entry.body $}</td>
-                <td>{$ entry.tenantID $}</td>
-                <td>{$ entry.requestID $}</td>
-                <td>{$ entry.time $}</td>
-                <td>{$ entry.date $}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="bs-component">
+        <ul class="nav nav-tabs">
+          <li class="active"><a translate href="#notifications" data-toggle="tab">Notifications</a></li>
+          <li><a translate href="#status" data-toggle="tab">Status</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade active in" id="notifications">
+              <hz-magic-search-context filter-facets="controller.filterFacets">
+              <hz-magic-search-bar>search</hz-magic-search-bar>
+                <table st-table="displayTable"
+                 st-magic-search
+                 st-safe-src="controller.notificationsTable"
+                 hz-table class="table table-striped table-rsp table-detail">
+                    <thead>
+                        <th>Name</th>
+                        <th>Event</th>
+                        <th>Owner</th>
+                        <th>Request</th>
+                        <th>Time</th>
+                        <th>Date</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="entry in displayTable | limitTo:10">
+                            <td>{$ entry.name $}</td>
+                            <td>{$ entry.body $}</td>
+                            <td>{$ entry.tenantID $}</td>
+                            <td>{$ entry.requestID $}</td>
+                            <td>{$ entry.time $}</td>
+                            <td>{$ entry.date $}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+              </hz-magic-search-context>
+          </div>
+          <div class="tab-pane fade" id="status">
+            <p>Table for websocket status will go here</p>
+          </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
