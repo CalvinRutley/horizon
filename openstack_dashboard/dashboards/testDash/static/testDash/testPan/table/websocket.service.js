@@ -31,6 +31,8 @@
         factory.subscribed = false;
         factory.activeSubscriptions = [];
         factory.addZaqarQueue = addZaqarQueue;
+
+        //'private' functions
         var authenticate = authenticate;
         var subscribe = subscribe;
         var subscribeAll = subscribeAll;
