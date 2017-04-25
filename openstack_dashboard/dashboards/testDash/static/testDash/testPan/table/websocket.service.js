@@ -30,13 +30,13 @@
         factory.authenticated = false;
         factory.subscribed = false;
         factory.activeSubscriptions = [];
-        factory.authenticate = authenticate;
-        factory.subscribe = subscribe;
-        factory.subscribeAll = subscribeAll;
         factory.addZaqarQueue = addZaqarQueue;
-        factory.updateSubscriptions = updateSubscriptions;
-        factory.updateSubscribed = updateSubscribed;
-        factory.responseHandler = responseHandler;
+        var authenticate = authenticate;
+        var subscribe = subscribe;
+        var subscribeAll = subscribeAll;
+        var updateSubscriptions = updateSubscriptions;
+        var updateSubscribed = updateSubscribed;
+        var responseHandler = responseHandler;
         var ws = new WebSocket(factory.connection);
 
         function authenticate() {
@@ -54,7 +54,7 @@
 
         function subscribeAll() {
             for(var i=0; i < factory.queues.length; i++) {
-                factory.subscribe(factory.queues[i]);
+                subscribe(factory.queues[i]);
             }
         }
 
@@ -95,8 +95,8 @@
                     }
                     else if (response.request.action == 'subscription_create') {
                         console.log(message);
-                        factory.updateSubscriptions(message);
-                        factory.updateSubscribed();
+                        updateSubscriptions(message);
+                        updateSubscribed();
                     }
                 }
                 else {
@@ -117,8 +117,8 @@
                 factory.uuid = data.id;
                 factory.token = data.token;
 
-                factory.authenticate();
-                factory.subscribeAll();
+                authenticate();
+                subscribeAll();
             }));
         };
 
@@ -136,7 +136,7 @@
         ws.onmessage = function(event) {
             console.log(event);
             var response = JSON.parse(event.data);
-            factory.responseHandler(response);
+            responseHandler(response);
         };
 
         return factory;
