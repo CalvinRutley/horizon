@@ -43,7 +43,6 @@
             var authentication = {'action': 'authenticate',
                 'headers': {'X-Auth-Token': factory.token, 'Client-ID': factory.uuid, 'X-Project-ID': factory.projectId}};
             ws.send(JSON.stringify(authentication));
-            console.log(JSON.stringify(authentication));
         }
 
         function subscribe(queueName) {
@@ -61,11 +60,9 @@
 
         function addZaqarQueue(queueName) {
             factory.queues.push(queueName);
-            console.log(factory.queues);
         }
 
         function updateSubscriptions(subscription) {
-            console.log(subscription);
             if(factory.activeSubscriptions.indexOf(subscription) == -1) {
                 factory.activeSubscriptions.push(subscription);
             }
@@ -73,27 +70,24 @@
         }
 
         function updateSubscribed() {
-            if(factory.activeSubscriptions.length >= 1) {
+            if(factory.activeSubscriptions.length) {
                 factory.subscribed = true;
             }
             else {
                 factory.subscribed = false;
             }
-            console.log(factory.subscribed);
         }
 
         function responseHandler(response) {
             if (response.Message_Type == "Notification") {
                 NotificationService.notificationHandler(response);
             }
-
             else {
                 var message = response.request.action;
                 message += ': ';
 
                 if (response.body.hasOwnProperty("message")) {
                     message += response.body.message;
-                    console.log(response.request.action);
 
                     if (response.request.action == 'authenticate') {
                         console.log(message);
@@ -114,7 +108,7 @@
 
         //Websocket Events
         ws.onopen = function() {
-            console.log('Websocket connection opened');
+            console.log('Websocket connection opened.');
             factory.connected = true;
 
             $q.all((userSession.get()).then(function (data) {
@@ -126,21 +120,17 @@
                 factory.authenticate();
                 factory.subscribeAll();
             }));
-
         };
 
         ws.onclose = function(event) {
             console.log(event);
-            console.log(event.reason);
             var reason = event.reason;
-            console.log(reason);
             console.log('Connection closed because of: ' + reason);
             factory.connected = false;
         };
 
         ws.onerror = function() {
             console.log('Websocket error.');
-
         };
 
         ws.onmessage = function(event) {
