@@ -104,7 +104,7 @@
         priority: 1
       })
       .append({
-        id: 'protected/infested',
+        id: 'protected',
         priority: 1
       })
       .append({
