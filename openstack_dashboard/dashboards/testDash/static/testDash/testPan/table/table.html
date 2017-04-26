@@ -41,24 +41,25 @@
               </hz-magic-search-context>
           </div>
           <div class="tab-pane fade" id="status">
-            <p>Table for websocket status will go here</p>
+              <table class="table table-striped table-rsp table-detail">
+                  <tr>
+                      <th>Connected</th>
+                      <td>{$ controller.connected $}</td>
+                  </tr>
+                  <tr>
+                      <th>Authenticated</th>
+                      <td>{$ controller.authenticated $}</td>
+                  </tr>
+                  <tr>
+                      <th>Subscribed</th>
+                      <td>{$ controller.subscribed $}</td>
+                  </tr>
+                  <tr>
+                      <th>Active Subscriptions</th>
+                      <td>{$ controller.activeSubscriptions $}</td>
+                  </tr>
+              </table>
           </div>
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

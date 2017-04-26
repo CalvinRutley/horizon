@@ -10,11 +10,16 @@
     ])
     .config(config);
 
-  config.$inject = ['$provide', '$windowProvider'];
+  config.$inject = ['$provide', '$windowProvider', '$routeProvider'];
 
-  function config($provide, $windowProvider) {
-    var path = $windowProvider.$get().STATIC_URL + 'dashboard/testDash/';
+  function config($provide, $windowProvider, $routeProvider) {
+    var path = $windowProvider.$get().STATIC_URL + 'testDash/';
     $provide.constant('horizon.dashboard.testDash.basePath', path);
+
+    $routeProvider.when('/testDash', {
+      templateUrl: path + 'testPan/table/table.html'
+    });
+
   }
 
 })();

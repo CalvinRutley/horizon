@@ -11,10 +11,9 @@
 # under the License.
 
 from django.conf.urls import url
-
-from openstack_dashboard.dashboards.testDash.testPan import views
+from horizon.browsers.views import AngularIndexView
 
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', AngularIndexView.as_view(title='Output'), name='index'),
 ]

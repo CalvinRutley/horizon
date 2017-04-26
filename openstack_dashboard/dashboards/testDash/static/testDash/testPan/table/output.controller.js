@@ -18,6 +18,10 @@
         var ctrl = this;
 
         ctrl.notificationsTable = NotificationService.eventsTable;
+        ctrl.connected = WebsocketService.getConnected;
+        ctrl.authenticated = "needs doing";
+        ctrl.subscribed = "needs doing";
+        ctrl.activeSubscriptions = "needs doing";
 
     }
 
