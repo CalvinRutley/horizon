@@ -4,9 +4,9 @@
 (function () {
   'use strict';
 
-  describe('Output', function () {
+  describe('horizon.dashboards.testDash', function () {
     it('should exist', function () {
-      expect(angular.module('Output')).toBeDefined();
+      expect(angular.module('horizon.dashboards.testDash')).toBeDefined();
     });
   });
 })();
