@@ -72,9 +72,9 @@
                keystone) {
     registry.getResourceType(imageResourceType)
       .setNames(gettext('Image'), gettext('Images'))
-      //.setSummaryTemplateUrl(basePath + 'details/drawer.html')
-      //.setItemInTransitionFunction(imagesService.isInTransition)
-      //.setProperties(imageProperties(imagesService, statuses))
+      .setSummaryTemplateUrl(basePath + 'details/drawer.html')
+      .setItemInTransitionFunction(imagesService.isInTransition)
+      .setProperties(imageProperties(imagesService, statuses))
       .setListFunction(imagesService.getImagesPromise)
       .setNeedsFilterFirstFunction(imagesService.getFilterFirstSettingPromise)
       .tableColumns

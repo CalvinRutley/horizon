@@ -16,6 +16,7 @@
 
     var ctrl = this;
     ctrl.notificationsTable = NotificationService.eventsTable;
+    WebsocketService.addZaqarQueue('LintPasses');
 
   }
 
